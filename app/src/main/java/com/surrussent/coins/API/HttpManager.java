@@ -15,6 +15,7 @@ public class HttpManager {
     private final ApiService service;
 
     private HttpManager() {
+        // Use library retrofit to call base url api
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.coinranking.com/v1/public/")
                 .addConverterFactory(GsonConverterFactory.create())

@@ -7,6 +7,7 @@ import retrofit2.http.GET;
 
 public interface ApiService {
 
+    // Use method GET with Path url
     @GET("coins/")
     Call<Collection> getAPICoins();
 

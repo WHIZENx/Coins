@@ -6,6 +6,9 @@ import java.util.List;
 
 public class Coins {
 
+    // This is Tertiary (Main) Data access object //
+
+    // Initialize object by API object name
     @SerializedName("id")
     private int id;
     @SerializedName("uuid")

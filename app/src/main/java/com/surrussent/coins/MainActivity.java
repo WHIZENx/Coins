@@ -1,6 +1,9 @@
 package com.surrussent.coins;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.surrussent.coins.API.HttpManager;
 import com.surrussent.coins.Adapter.CoinsAdapter;
+import com.surrussent.coins.Modal.Coins;
 import com.surrussent.coins.Modal.Collection;
 
 import org.json.JSONArray;
@@ -23,54 +27,87 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
-    private RecyclerView recycle_coin;
+
+    // Initialize View Object
+    private ProgressBar progressBar;
+
+    // Initialize Recyclerview to show coins object
+    private RecyclerView recycler_coin;
     private CoinsAdapter coinsAdapter;
-    private List<JSONObject> mCoins;
+
+    // Initialize List of coins
+    private final List<JSONObject> mCoins = new ArrayList<JSONObject>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        progressBar = findViewById(R.id.progressBar);
+        recycler_coin = findViewById(R.id.recycler_coin);
+
+        // Set Recyclerview is fit screen size.
+        recycler_coin.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recycler_coin.setLayoutManager(linearLayoutManager);
 
-        recycle_coin = findViewById(R.id.reccoin);
-        recycle_coin.setHasFixedSize(true);
-        recycle_coin.setLayoutManager(linearLayoutManager);
-
+        // Load data from API.
         loadData();
     }
 
     private void loadData() {
+        // Call API by okhttp and retrofit with Method GET
         Call<Collection> call = HttpManager.getInstance().getService().getAPICoins();
         call.enqueue(new Callback<Collection>() {
             @Override
             public void onResponse(Call<Collection> call, Response<Collection> response) {
                 if (response.isSuccessful()) {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    // String json to data access objects
                     Collection dao = response.body();
-                    List coins = dao.getData().getCoins();
+
+                    // Get list coins in data access objects
+                    List<Coins> coins = dao.getData().getCoins();
+                    // Size of list coins
                     int size_coins = coins.size();
-                    mCoins = new ArrayList<JSONObject>();
+
+                    // Convert coins object to json array
                     JSONArray coin_arr = new JSONArray(coins);
+
                     for (int i=0; i < size_coins; i++) {
                         try {
-                            JSONObject jObj = coin_arr.getJSONObject(i);
-                            mCoins.add(jObj);
+                            // Add coin object of coins array by index of json object
+                            mCoins.add(coin_arr.getJSONObject(i));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
+                    // Set variable coins adapter to config display
+                    // - Put Application context to adapter
+                    // - Put mCoins (list of coins object
+                    // - Put Activity to adapter
                     coinsAdapter = new CoinsAdapter(getApplicationContext(), mCoins, MainActivity.this);
-                    recycle_coin.setAdapter(coinsAdapter);
+                    // Display coin to recyclerview
+                    recycler_coin.setAdapter(coinsAdapter);
                 }
             }
 
             @Override
             public void onFailure(Call<Collection> call, Throwable t) {
+                progressBar.setVisibility(View.VISIBLE);
+                // Show exception error
                 Toast.makeText(MainActivity.this
                         , t.toString()
                         , Toast.LENGTH_LONG)
                         .show();
+
+                // Reconnect when error occurs (10s)
+                new CountDownTimer(10000, 1000) {
+                    public void onFinish() {
+                        loadData();
+                    }
+                    public void onTick(long millisUntilFinished) { }
+                }.start();
             }
         });
     }

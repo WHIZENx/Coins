@@ -4,6 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class Collection {
 
+    // This is Primary Data access object //
+
+    // Initialize object by API object name
     @SerializedName("data")
     private Data data;
 

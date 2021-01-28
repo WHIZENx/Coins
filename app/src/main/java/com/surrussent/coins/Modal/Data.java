@@ -6,6 +6,9 @@ import java.util.List;
 
 public class Data {
 
+    // This is Secondary Data access object //
+
+    // Initialize object by API object name
     @SerializedName("coins")
     private List coins;
 
