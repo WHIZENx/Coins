@@ -38,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
     // Initialize List of coins
     private final List<JSONObject> mCoins = new ArrayList<JSONObject>();
 
+    // Initialize variable
+    private CountDownTimer countDownTimer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +105,8 @@ public class MainActivity extends AppCompatActivity {
                         .show();
 
                 // Reconnect when error occurs (10s)
-                new CountDownTimer(10000, 1000) {
+                if (countDownTimer != null) countDownTimer.cancel();
+                countDownTimer = new CountDownTimer(10000, 1000) {
                     public void onFinish() {
                         loadData();
                     }
@@ -110,5 +114,26 @@ public class MainActivity extends AppCompatActivity {
                 }.start();
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // When start app if array coins empty, It call load data
+        if (mCoins.size() == 0) loadData();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // When stop app countdown timer is cancel
+        if (countDownTimer != null) countDownTimer.cancel();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // When close app countdown timer is cancel
+        if (countDownTimer != null) countDownTimer.cancel();
     }
 }
