@@ -29,6 +29,6 @@ Coins application will extract information from the Coinranking API in a list fo
   
 <hr>
 
-Design by Wongnai ![Wongnai](https://www.img.in.th/images/a7e549a7087e6a5c3195f92e3b87dbb4.png "Wongnai")  (Android Intern Assignmment 2022)
+Design by Wongnai ![Wongnai](https://www.img.in.th/images/a7e549a7087e6a5c3195f92e3b87dbb4.png "Wongnai")  (Android Intern Assignmment 2021)
 
 API by Coinranking ![Coinranking](https://www.img.in.th/images/870138395fd6c8420ee305ceff4b1b43.png "Coinranking")
