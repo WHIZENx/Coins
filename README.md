@@ -4,7 +4,7 @@ Coins application will extract information from the Coinranking API in a list fo
 
 - **Coinranking API docs v1**
 
-<a href="https://docs.coinranking.com/public#getcoins">``` https://docs.coinranking.com/public#getcoins ```</a>
+<a href="https://developers.coinranking.com/api/v1/documentation/">``` https://developers.coinranking.com/api/v1/documentation/ ```</a>
 
 - **HTTP GET Request**
 
