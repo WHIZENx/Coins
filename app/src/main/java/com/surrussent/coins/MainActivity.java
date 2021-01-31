@@ -35,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recycler_coin;
     private CoinsAdapter coinsAdapter;
 
-    // Initialize List of coins
-    private final List<JSONObject> mCoins = new ArrayList<JSONObject>();
+    // Initialize List of coins to empty
+    private List<JSONObject> mCoins = new ArrayList<JSONObject>();
 
     // Initialize variable
     private CountDownTimer countDownTimer;
@@ -73,6 +73,9 @@ public class MainActivity extends AppCompatActivity {
                     List<Coins> coins = dao.getData().getCoins();
                     // Size of list coins
                     int size_coins = coins.size();
+
+                    // Reset List of coins to empty
+                    mCoins = new ArrayList<JSONObject>();
 
                     // Convert coins object to json array
                     JSONArray coin_arr = new JSONArray(coins);
