@@ -72,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
 
                         // Set variable coins adapter to config display
                         // - Put Application context to adapter
-                        // - Put mCoins (list of coins object
-                        // - Put Activity to adapter
+                        // - Put mCoins (json array of coins object)
+                        // - Put Activity of MainActivity to adapter
                         coinsAdapter = new CoinsAdapter(getApplicationContext(), mCoins, MainActivity.this);
                         // Display coin to recyclerview
                         recycler_coin.setAdapter(coinsAdapter);
