@@ -17,19 +17,18 @@ import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou;
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYouListener;
 import com.surrussent.coins.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.List;
 
 public class CoinsAdapter extends RecyclerView.Adapter<CoinsAdapter.MyViewHolder> {
 
     // Initialize Adapter variable
     private final Context mContext;
-    private final List<JSONObject> mData;
+    private final JSONArray mData;
     private final Activity mActivity;
 
-    public CoinsAdapter(Context mContext, List<JSONObject> mData, Activity mActivity) {
+    public CoinsAdapter(Context mContext, JSONArray mData, Activity mActivity) {
         this.mContext = mContext;
         this.mData = mData;
         this.mActivity = mActivity;
@@ -46,7 +45,7 @@ public class CoinsAdapter extends RecyclerView.Adapter<CoinsAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
         // Get coin object by Json Object with position
-        JSONObject jObj = mData.get(position);
+        JSONObject jObj = mData.optJSONObject(position);
         try {
             // Get icon, name, description of coin object
             String url_ico = jObj.getString("iconUrl");
@@ -88,7 +87,7 @@ public class CoinsAdapter extends RecyclerView.Adapter<CoinsAdapter.MyViewHolder
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return mData.length();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {

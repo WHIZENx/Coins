@@ -12,15 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.surrussent.coins.API.HttpManager;
 import com.surrussent.coins.Adapter.CoinsAdapter;
-import com.surrussent.coins.Modal.Coins;
-import com.surrussent.coins.Modal.Collection;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private CoinsAdapter coinsAdapter;
 
     // Initialize List of coins to empty
-    private List<JSONObject> mCoins = new ArrayList<JSONObject>();
+    private JSONArray mCoins = new JSONArray();
 
     // Initialize variable
     private CountDownTimer countDownTimer;
@@ -60,46 +57,34 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadData() {
         // Call API by okhttp and retrofit with Method GET
-        Call<Collection> call = HttpManager.getInstance().getService().getAPICoins();
-        call.enqueue(new Callback<Collection>() {
+        Call<Map> call = HttpManager.getInstance().getService().getAPICoins();
+        call.enqueue(new Callback<Map>() {
             @Override
-            public void onResponse(Call<Collection> call, Response<Collection> response) {
+            public void onResponse(Call<Map> call, Response<Map> response) {
                 if (response.isSuccessful()) {
                     progressBar.setVisibility(View.INVISIBLE);
-                    // String json to data access objects
-                    Collection dao = response.body();
+                    // Map object to json objects
+                    assert response.body() != null;
+                    JSONObject obj_data = new JSONObject(response.body());
+                    try {
+                        // Create coins object to json array
+                        mCoins = obj_data.getJSONObject("data").getJSONArray("coins");
 
-                    // Get list coins in data access objects
-                    List<Coins> coins = dao.getData().getCoins();
-                    // Size of list coins
-                    int size_coins = coins.size();
-
-                    // Reset List of coins to empty
-                    mCoins = new ArrayList<JSONObject>();
-
-                    // Convert coins object to json array
-                    JSONArray coin_arr = new JSONArray(coins);
-
-                    for (int i=0; i < size_coins; i++) {
-                        try {
-                            // Add coin object of coins array by index of json object
-                            mCoins.add(coin_arr.getJSONObject(i));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        // Set variable coins adapter to config display
+                        // - Put Application context to adapter
+                        // - Put mCoins (list of coins object
+                        // - Put Activity to adapter
+                        coinsAdapter = new CoinsAdapter(getApplicationContext(), mCoins, MainActivity.this);
+                        // Display coin to recyclerview
+                        recycler_coin.setAdapter(coinsAdapter);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    // Set variable coins adapter to config display
-                    // - Put Application context to adapter
-                    // - Put mCoins (list of coins object
-                    // - Put Activity to adapter
-                    coinsAdapter = new CoinsAdapter(getApplicationContext(), mCoins, MainActivity.this);
-                    // Display coin to recyclerview
-                    recycler_coin.setAdapter(coinsAdapter);
                 }
             }
 
             @Override
-            public void onFailure(Call<Collection> call, Throwable t) {
+            public void onFailure(Call<Map> call, Throwable t) {
                 progressBar.setVisibility(View.VISIBLE);
                 // Show exception error
                 Toast.makeText(MainActivity.this
@@ -123,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         // When start app if array coins empty, It call load data
-        if (mCoins.size() == 0) loadData();
+        if (mCoins.length() == 0) loadData();
     }
 
     @Override
