@@ -6,13 +6,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class HttpManager {
 
     private static HttpManager instances;
+    private final ApiService service;
 
     public static HttpManager getInstance() {
         if (instances == null)
             instances = new HttpManager();
         return instances;
     }
-    private final ApiService service;
 
     private HttpManager() {
         // Use library retrofit to call base url api
@@ -23,7 +23,7 @@ public class HttpManager {
         service = retrofit.create(ApiService.class);
     }
 
-    public  ApiService getService() {
+    public ApiService getService() {
         return service;
     }
 }
