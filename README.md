@@ -22,12 +22,15 @@ Coins application will pull informations from the Coinranking API in a list form
 ### Implementation
 
 - **Library**
-  1. Recyclerview 
+  1. Recyclerview
+  2. Lifecycle extension
 
 - **3rd Libraries**
   1. Retrofit
   2. OkHttp
   3. GlideToVectorYou
+  4. Reactive Extensions for Android
+  5. Reactive Extensions for the JVM
 
 <hr>
 <p align="center">Design&Assignment by <a href="https://careers.lmwn.com/">LINE MAN Wongnai Team</a> <img src="https://www.img.in.th/images/52bf368914f1e85afc9254bafa7fc0b0.png" alt="LINE MAN"> <img src="https://www.img.in.th/images/a7e549a7087e6a5c3195f92e3b87dbb4.png" alt="Wongnai"> (Android Intern Assignmment 2021)</p>
